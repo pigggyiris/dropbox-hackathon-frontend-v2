@@ -21,7 +21,7 @@ function MyRoutes() {
             <Route path="/Profile" element={<ProfilePage />} />
             <Route path="/StartPetition" element={<StartPetitionPage />} />
             <Route path="/BrowsePetitions" element={<BrowsePetitionsPage />} />
-            <Route path="/SinglePetition" element={<SinglePetitionPage />} />
+            <Route path="/Petitions/:fileID" element={<SinglePetitionPage />} />
             <Route path="/SearchResult" element={<SearchResultPage />} />
             <Route path="/Login" element={<LoginPage />} />
             <Route path="/StartPetitionNext" element={<StartPetitionNextPage />} />

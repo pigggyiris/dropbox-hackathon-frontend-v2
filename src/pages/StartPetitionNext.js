@@ -10,6 +10,7 @@ const StartPetitionNextPage = () => {
                 <h2 className="text-xl font-semibold mb-4">Preview your petition</h2>
                 <div className="border bg-gray-100 h-64 mb-4"></div> {/* AI generated model*/}
                 <div className="flex justify-end gap-4">
+                    <button className="px-6 py-2">Sign</button>
                     <button className="px-6 py-2">Save</button>
                     <button className="px-6 py-2">Export</button>
                 </div>
