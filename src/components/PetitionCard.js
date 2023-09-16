@@ -3,7 +3,6 @@ import pdfFile from '../assets/Signatures.pdf';
 
 
 function PetitionCard(props) {
- 
   const percentage = Math.round((props.numberOfSigned / props.target) * 100);
 
   return (
@@ -25,18 +24,19 @@ function PetitionCard(props) {
             <div className="text-right">
               <span className="text-xs font-semibold inline-block">
                   {props.numberOfSigned + "/" + props.target} 
-                  <a href={pdfFile} className="text-blue-500 hover:text-blue-700 text-xs signaturesLink ml-2" target="_blank" rel="noopener noreferrer">
-                      Signatures
-                  </a>
               </span>
-          </div>
+            </div>
           </div>
           <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-teal-200">
             <div style={{ width: `${percentage}%` }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-teal-600"></div>
           </div>
         </div>
-
-        <Link className="text-blue-500 hover:text-blue-700" to={`/Petitions/${props.id}`}>
+        
+        <span className= "block mb-2">
+            View signatures by <a href={pdfFile} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-700 inline">PDF</a>
+        </span>
+        
+        <Link className="text-blue-500 hover:text-blue-700 block" to={`/Petitions/${props.id}`}>
           Read More
         </Link>
       </div>
