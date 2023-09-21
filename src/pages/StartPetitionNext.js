@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import HelloSign from "hellosign-embedded";
+
+const client = new HelloSign();
 
 const StartPetitionNextPage = () => {
   const { state } = useLocation();
@@ -17,12 +20,25 @@ const StartPetitionNextPage = () => {
   const handleSignClick = async () => {
     setIsEditing(false);
     try {
-      await axios.post("http://localhost:3000/v1/petitions/", {
+      const response = await axios.post("http://localhost:3000/v1/petitions/", {
         userName: userName,
         userEmail: userEmail,
         title: state.title,
         petition: petitionText,
       });
+
+      // 看看有没有url
+      if (response.data && response.data.signUrl) {
+        const signUrl = response.data.signUrl;
+
+        client.open(signUrl, {
+          clientId: "efe3f85f67aafe39ff9adc714413cf11",
+          skipDomainVerification: true,
+        });
+      } else {
+        console.log("No signUrl provided in response");
+      }
+
       console.log("Petition sent successfully!");
     } catch (error) {
       console.error("Error sending petition:", error);

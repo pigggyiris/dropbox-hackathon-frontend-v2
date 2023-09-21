@@ -26,9 +26,7 @@ function StartPetitionPage() {
     e.preventDefault();
 
     axios
-      .post("http://localhost:3000/v1/petitions/text", {
-        petitionData,
-      })
+      .post("http://localhost:3000/v1/petitions/text", petitionData)
       .then((response) => {
         console.log(response);
         setResponseData(response.data);
