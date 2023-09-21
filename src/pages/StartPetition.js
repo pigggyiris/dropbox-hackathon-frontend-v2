@@ -25,25 +25,6 @@ function StartPetitionPage() {
   const createPetitionText = (e) => {
     e.preventDefault();
 
-<<<<<<< Updated upstream
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/v1/petitions/text",
-        petitionData
-      );
-
-      console.log("Entire Response:", response);
-
-      if (response.data) {
-        console.log("Returned petition from server:", response.data);
-        setSubmittedSuccessfully(true);
-      } else {
-        console.error("Unexpected response structure");
-      }
-    } catch (error) {
-      console.error("Error submitting the petition:", error);
-    }
-=======
     axios
       .post("http://localhost:3000/v1/petitions/text", {
         petitionData,
@@ -65,7 +46,6 @@ function StartPetitionPage() {
         }
         console.log(error.config);
       });
->>>>>>> Stashed changes
   };
 
   return (
