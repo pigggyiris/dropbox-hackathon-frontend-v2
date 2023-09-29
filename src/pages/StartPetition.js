@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Loading from '../components/Loading'
 
 function StartPetitionPage() {
   const [petitionData, setPetitionData] = useState({
@@ -176,6 +177,7 @@ function StartPetitionPage() {
       <div className="text-right mt-8">
         {isFetching ? (
           <>
+        <Loading />
             <button
               className="py-3 px-6 bg-gray-400 hover:bg-gray-400 hover:text-teal-950 cursor-not-allowed"
               disabled

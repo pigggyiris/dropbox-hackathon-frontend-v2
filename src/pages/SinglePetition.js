@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import HelloSign from "hellosign-embedded";
-import defaultImg from '../assets/default-petition.png'
+import defaultImg from '../assets/default-petition.png';
+import Loading from '../components/Loading'
 
 
 function SinglePetitionPage() {
@@ -170,6 +171,7 @@ function SinglePetitionPage() {
         </div>
 
         <div className="flex">
+        {isSigning && <Loading />}
           <button onClick={handleSign} className={"py-3 px-6 mr-3 " + (isSigning ? 'bg-gray-400 cursor-not-allowed' : '')} disabled={isSigning}>
             Sign
           </button>
