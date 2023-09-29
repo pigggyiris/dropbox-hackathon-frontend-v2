@@ -11,4 +11,13 @@
       @apply text-teal-950 border bg-amber-400 border-amber-400
       hover:bg-transparent hover:text-teal-800 rounded-md
     }
+
+    button:disabled {
+      @apply bg-gray-400 text-teal-950 cursor-not-allowed;
+    }
+    
+    button:disabled:hover {
+      @apply bg-gray-400 text-teal-950;
+    }
+    
 }

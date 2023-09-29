@@ -7,11 +7,14 @@ import HelloSign from "hellosign-embedded";
 const client = new HelloSign();
 
 const StartPetitionNextPage = () => {
-  const { state } = useLocation();
+  const location = useLocation();
+
   const [isEditing, setIsEditing] = useState(false);
-  const [petitionText, setPetitionText] = useState(state);
+  const [petitionText, setPetitionText] = useState(location.state.responseData);
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
+  const [petitionId, setPetitionId] = useState(null);
+  const [signId, setSignId] = useState(null);
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -19,17 +22,26 @@ const StartPetitionNextPage = () => {
 
   const handleSignClick = async () => {
     setIsEditing(false);
+    //检查一下发送到backend的text
+    console.log("userName:", userName);
+    console.log("userEmail:", userEmail);
+    console.log("title:", location.state.title);
+    console.log("petition:", petitionText);
+
     try {
       const response = await axios.post("http://localhost:3000/v1/petitions/", {
         userName: userName,
         userEmail: userEmail,
-        title: state.title,
+        title: location.state.title,
         petition: petitionText,
       });
 
-      // 看看有没有url
+      // 看看接收到的东西
       if (response.data && response.data.signUrl) {
         const signUrl = response.data.signUrl;
+
+        setPetitionId(response.data.petitionId);
+        setSignId(response.data.signId);
 
         client.open(signUrl, {
           clientId: "efe3f85f67aafe39ff9adc714413cf11",
@@ -42,6 +54,23 @@ const StartPetitionNextPage = () => {
       console.log("Petition sent successfully!");
     } catch (error) {
       console.error("Error sending petition:", error);
+    }
+  };
+
+  const handleCreateClick = async () => {
+    if (!petitionId || !signId) {
+      console.error("Missing petitionId or signId");
+      return;
+    }
+
+    try {
+      const response = await axios.put("http://localhost:3000/v1/petitions/", {
+        petitionId: petitionId,
+        signId: signId,
+      });
+      console.log("Petition updated successfully!", response.data);
+    } catch (error) {
+      console.error("Error updating petition:", error);
     }
   };
 
@@ -143,7 +172,12 @@ const StartPetitionNextPage = () => {
         <Link to="/StartPetition">
           <button className="px-6 py-2">Back</button>
         </Link>
-        <button className="px-6 py-2">Create</button>
+        <button
+          onClick={handleCreateClick}
+          className="px-6 py-2 bg-teal-500 text-gray-50"
+        >
+          Create
+        </button>
       </div>
     </div>
   );

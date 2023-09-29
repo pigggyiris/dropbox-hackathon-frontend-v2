@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function StartPetitionPage() {
   const [petitionData, setPetitionData] = useState({
@@ -9,7 +9,18 @@ function StartPetitionPage() {
     background: "",
     content: "",
     target: "10",
+    petition: "",
   });
+  const navigate = useNavigate();
+
+  const goToNextPage = () => {
+    navigate("/StartPetitionNext", {
+      state: {
+        responseData: responseData,
+        title: petitionData.title,
+      },
+    });
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,10 +31,11 @@ function StartPetitionPage() {
   };
 
   const [responseData, setResponseData] = useState("");
-  const [isFetching, setIsFetching] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
 
   const createPetitionText = (e) => {
     e.preventDefault();
+    setIsFetching(true);
 
     axios
       .post("http://localhost:3000/v1/petitions/text", petitionData)
@@ -43,6 +55,7 @@ function StartPetitionPage() {
           console.log("Error", error.message);
         }
         console.log(error.config);
+        setIsFetching(false);
       });
   };
 
@@ -161,19 +174,12 @@ function StartPetitionPage() {
       </div>
 
       <div className="text-right mt-8">
-        {!isFetching ? (
+        {isFetching ? (
           <>
-            <button className="py-3 px-6" onClick={createPetitionText}>
-              Generate
-            </button>
-            <Link to={"/StartPetitionNext"} state={responseData}>
-              <button className="py-3 px-6 ml-2">Next</button>
-            </Link>
-            <p className="mt-4">Data fetched</p>
-          </>
-        ) : (
-          <>
-            <button className="py-3 px-6" onClick={createPetitionText}>
+            <button
+              className="py-3 px-6 bg-gray-400 hover:bg-gray-400 hover:text-teal-950 cursor-not-allowed"
+              disabled
+            >
               Generate
             </button>
             <button
@@ -182,6 +188,24 @@ function StartPetitionPage() {
             >
               Next
             </button>
+          </>
+        ) : (
+          <>
+            <button className="py-3 px-6" onClick={createPetitionText}>
+              Generate
+            </button>
+            {responseData ? (
+              <button onClick={goToNextPage} className="py-3 px-6 ml-2">
+                Next
+              </button>
+            ) : (
+              <button
+                className="py-3 px-6 ml-2 cursor-not-allowed"
+                disabled
+              >
+                Next
+              </button>
+            )}
           </>
         )}
       </div>

@@ -1,18 +1,37 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
+import axios from 'axios';
+
 
 const Navbar = () => {
     const [nav, setNav] = useState(false)
     const [search, setSearch] = useState('')
     const handleClick = () => setNav(!nav)
     const handleClose = () => setNav(!nav)
-    const handleSearch = (e) => {
+const navigate = useNavigate();
+
+
+    const handleSearch = async (e) => {
         e.preventDefault();
-        // Handle search here
-        // For example, you can send the search query to the server
-        console.log('Searching for:', search)
+    
+        try {
+            const response = await axios.get(`http://localhost:3000/v1/petitions/?text=${search}`);
+    
+            if (response.data && Array.isArray(response.data) && response.data.length) {
+                console.log('Search results:', response.data);
+                navigate('/SearchResult', { state: { results: response.data } });
+            } else {
+                console.log('No related petitions found.');
+            }
+            
+        } catch (error) {
+            console.error('Error while searching:', error);
+        }
     }
+    
+    
+    
 
     return (
         <div className='w-screen h-[80px] z-10 bg-teal-50 fixed drop-shadow-lg'>

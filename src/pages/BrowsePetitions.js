@@ -1,57 +1,71 @@
-import { useState } from "react";
-import dummyPetitionData from "../components/dummyPetitionData";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import PetitionCard from "../components/PetitionCard";
 
-
-
 function BrowsePetitionPage() {
-    const [displayPetitions, setDisplayPetition] = useState(dummyPetitionData);
+  const [displayPetitions, setDisplayPetition] = useState([]);
 
-    
-    const searchHandler = (e) => {
-        const currentValue = e.target.value;
-        if (!currentValue) {
-            setDisplayPetition(dummyPetitionData);
-        } else {
-            const filteredPetitions = dummyPetitionData.filter(data => data.title.toLowerCase().includes(currentValue.toLowerCase()));
-            setDisplayPetition(filteredPetitions);
-        }
-    };
+  useEffect(() => {
+    // 发起请求获取所有petitions
+    fetchPetitions();
+  }, []); // 空依赖数组表示这个effect只会在组件mount时运行
 
-    return (
-        <div className="p-8">
-            <h1 className="text-4xl font-bold mb-4">
-                Browse Petitions
-            </h1>
-            
-            
-            <div className="mb-6">
-                <input
-                    type="text"
-                    placeholder="Search"
-                    onChange={searchHandler}
-                    className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
-                />
-            </div>
+  const fetchPetitions = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/v1/petitions/allpetitions"
+      );
+      console.log(response.data[0]); // 打印第一个petition来检查
 
-           
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {displayPetitions.map((petition) => (
-                    <PetitionCard
-                        key={petition.id}
-                        id={petition.id}
-                        image={petition.image}
-                        title={petition.title}
-                        author={petition.author}
-                        createdOn={petition.createdOn}
-                        description={petition.description}
-                        numberOfSigned={petition.signed.length}
-                        target={petition.target}
-                    />
-                ))}
-            </div>
-        </div>
-    );
+      setDisplayPetition(response.data); // 使用axios时，数据存储在response.data中
+    } catch (error) {
+      console.error("Error fetching petitions:", error);
+    }
+  };
+
+  const searchHandler = async (e) => {
+    const currentValue = e.target.value;
+    if (!currentValue) {
+      await fetchPetitions();
+    } else {
+      const filteredPetitions = displayPetitions.filter((petition) =>
+        petition.petitionName.toLowerCase().includes(currentValue.toLowerCase())
+      );
+      setDisplayPetition(filteredPetitions);
+    }
+  };
+
+  return (
+    <div className="p-8">
+      <h1 className="text-4xl font-bold mb-4">Browse Petitions</h1>
+
+      <div className="mb-6">
+        <input
+          type="text"
+          placeholder="Search"
+          onChange={searchHandler}
+          className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
+        />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {displayPetitions.map((petition) => (
+          <PetitionCard
+            key={petition._id}
+            id={petition._id}
+            title={petition.petitionName}
+            author={petition.author}
+            createdOn={petition.createdOn}
+            description={petition.petitionContent}
+            numberOfSigned={petition.numberOfSigned}
+            target={petition.target}
+            image={petition.image}
+            pdfData={petition.data}
+          />
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export default BrowsePetitionPage;
