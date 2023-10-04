@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+
 import axios from "axios";
 import HelloSign from "hellosign-embedded";
+import Loading from "../components/Loading";
 
 const client = new HelloSign();
 
 const StartPetitionNextPage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const [isEditing, setIsEditing] = useState(false);
   const [petitionText, setPetitionText] = useState(location.state.responseData);
@@ -16,11 +18,15 @@ const StartPetitionNextPage = () => {
   const [petitionId, setPetitionId] = useState(null);
   const [signId, setSignId] = useState(null);
 
+  const [isSigning, setIsSigning] = useState(false);
+  const [canCreateDelete, setcanCreateDelete] = useState(false);
+
   const handleEditClick = () => {
     setIsEditing(true);
   };
 
   const handleSignClick = async () => {
+    setIsSigning(true);
     setIsEditing(false);
     //检查一下发送到backend的text
     console.log("userName:", userName);
@@ -35,6 +41,8 @@ const StartPetitionNextPage = () => {
         title: location.state.title,
         petition: petitionText,
       });
+      setIsSigning(false);
+      setcanCreateDelete(true); // 已签署
 
       // 看看接收到的东西
       if (response.data && response.data.signUrl) {
@@ -53,7 +61,30 @@ const StartPetitionNextPage = () => {
 
       console.log("Petition sent successfully!");
     } catch (error) {
+      setIsSigning(false);
       console.error("Error sending petition:", error);
+      Window.alert("Error sending petition:", error);
+    }
+  };
+
+  const handleDeleteClick = async () => {
+    const confirmation = window.confirm(
+      "Are you sure you want to delete the currently signed petition?"
+    );
+    if (!confirmation) {
+      return; // 点击了取消
+    }
+
+    if (!petitionId) {
+      console.error("Missing petitionId");
+      return;
+    }
+
+    try {
+      await axios.delete(`http://localhost:3000/v1/petitions/${petitionId}`);
+      window.alert("The signed petition has been deleted.");
+    } catch (error) {
+      console.error("Error deleting petition:", error);
     }
   };
 
@@ -69,6 +100,9 @@ const StartPetitionNextPage = () => {
         signId: signId,
       });
       console.log("Petition updated successfully!", response.data);
+      window.alert("Petition has been successfully created!");
+
+      navigate("/BrowsePetitions");
     } catch (error) {
       console.error("Error updating petition:", error);
     }
@@ -80,15 +114,12 @@ const StartPetitionNextPage = () => {
       <div className="space-y-6 mb-8">
         <h2 className="text-xl font-semibold mb-4">Preview your petition</h2>
         <div className="border bg-gray-100 h-64 mb-4 overflow-y-auto">
-          {isEditing ? (
-            <textarea
-              value={petitionText}
-              onChange={(e) => setPetitionText(e.target.value)}
-              className="w-full h-full bg-gray-100 border-none resize-none"
-            ></textarea>
-          ) : (
-            petitionText
-          )}
+          <textarea
+            value={petitionText}
+            onChange={(e) => setPetitionText(e.target.value)}
+            className="w-full h-full bg-gray-100 border-none resize-none"
+            readOnly={!isEditing}
+          ></textarea>
         </div>
 
         <div className="space-y-4 mb-4">
@@ -115,13 +146,18 @@ const StartPetitionNextPage = () => {
         </div>
 
         <div className="flex justify-end gap-4">
-          <button onClick={handleEditClick} className="px-6 py-2">
+          <button
+            onClick={handleEditClick}
+            className="px-6 py-2"
+            disabled={isSigning}
+          >
             Edit
           </button>
 
           <button
             onClick={handleSignClick}
             className="px-6 py-2 bg-teal-500 text-gray-50"
+            disabled={isSigning || canCreateDelete}
           >
             Sign
           </button>
@@ -170,15 +206,26 @@ const StartPetitionNextPage = () => {
 
       <div className="flex justify-end gap-4">
         <Link to="/StartPetition">
-          <button className="px-6 py-2">Back</button>
+          <button className="px-6 py-2" disabled={isSigning}>
+            Back
+          </button>
         </Link>
+        <button
+          onClick={handleDeleteClick}
+          className="px-6 py-2 bg-red-500 text-gray-50"
+          disabled={!canCreateDelete || isSigning}
+        >
+          Delete
+        </button>
         <button
           onClick={handleCreateClick}
           className="px-6 py-2 bg-teal-500 text-gray-50"
+          disabled={!canCreateDelete || isSigning}
         >
           Create
         </button>
       </div>
+      {isSigning && <Loading />}
     </div>
   );
 };

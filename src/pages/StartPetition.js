@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Loading from '../components/Loading'
+import Loading from "../components/Loading";
 
 function StartPetitionPage() {
   const [petitionData, setPetitionData] = useState({
@@ -44,16 +44,24 @@ function StartPetitionPage() {
         console.log(response);
         setResponseData(response.data);
         setIsFetching(false);
+        window.alert(
+          "Petition has been generated successfully. Please click 'Next' to preview your petition."
+        );
       })
       .catch(function (error) {
         if (error.response) {
           console.log(error.response.data);
           console.log(error.response.status);
           console.log(error.response.headers);
+          window.alert(
+            "Error generating petition: " + error.response.data.message
+          );
         } else if (error.request) {
           console.log(error.request);
+          window.alert("Error generating petition: No response from server.");
         } else {
           console.log("Error", error.message);
+          window.alert("Error generating petition: " + error.message);
         }
         console.log(error.config);
         setIsFetching(false);
@@ -177,7 +185,7 @@ function StartPetitionPage() {
       <div className="text-right mt-8">
         {isFetching ? (
           <>
-        <Loading />
+            <Loading />
             <button
               className="py-3 px-6 bg-gray-400 hover:bg-gray-400 hover:text-teal-950 cursor-not-allowed"
               disabled
@@ -201,10 +209,7 @@ function StartPetitionPage() {
                 Next
               </button>
             ) : (
-              <button
-                className="py-3 px-6 ml-2 cursor-not-allowed"
-                disabled
-              >
+              <button className="py-3 px-6 ml-2 cursor-not-allowed" disabled>
                 Next
               </button>
             )}

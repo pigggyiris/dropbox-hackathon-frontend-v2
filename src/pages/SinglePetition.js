@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import HelloSign from "hellosign-embedded";
-import defaultImg from '../assets/default-petition.png';
-import Loading from '../components/Loading'
-
+import defaultImg from "../assets/default-petition.png";
+import Loading from "../components/Loading";
 
 function SinglePetitionPage() {
   const { fileID } = useParams();
@@ -12,8 +11,9 @@ function SinglePetitionPage() {
   const client = new HelloSign();
   const [petitionId, setPetitionId] = useState(null);
   const [signId, setSignId] = useState(null);
-  
-   const [canFinishSign, setCanFinishSign] = useState(false); // 是否可以点击Finish Sign按钮
+  const navigate = useNavigate();
+
+  const [canFinishSign, setCanFinishSign] = useState(false); // 是否可以点击Finish Sign按钮
   const [isSigning, setIsSigning] = useState(false); // 是否正在签署过程中
 
   useEffect(() => {
@@ -68,6 +68,8 @@ function SinglePetitionPage() {
         signId: signId,
       });
       console.log("Petition updated successfully!", response.data);
+      window.alert("Petition updated successfully!");
+      navigate("/BrowsePetitions");
     } catch (error) {
       console.error("Error updating petition:", error);
     }
@@ -82,15 +84,19 @@ function SinglePetitionPage() {
 
   return (
     <div className="flex">
-    <div className="w-3/5 m-10">
-      <img src={petition.image || defaultImg} alt="" className="w-3/4 rounded-lg mb-4 mx-auto" />
-      <h1 className="font-bold text-xl mb-2">{petition.petitionName}</h1> 
-      <p className="text-gray-600 mb-2">{"Created by: " + petition.author}</p>
-      <p className="text-gray-600 mb-2">
-        {"Created On: " + petition.createdOn}
-      </p>
-      <p className="line-clamp-5 mb-2">{petition.petitionContent}</p> 
-    </div>
+      <div className="w-3/5 m-10">
+        <img
+          src={petition.image || defaultImg}
+          alt=""
+          className="w-3/4 rounded-lg mb-4 mx-auto"
+        />
+        <h1 className="font-bold text-xl mb-2">{petition.petitionName}</h1>
+        <p className="text-gray-600 mb-2">{"Created by: " + petition.author}</p>
+        <p className="text-gray-600 mb-2">
+          {"Created On: " + petition.createdOn}
+        </p>
+        <p className="line-clamp-5 mb-2">{petition.petitionContent}</p>
+      </div>
 
       <div className="w-2/5 m-10 p-10 border border-gray-300 rounded-xl">
         <h1 className="font-bold text-xl mb-4">Sign this petition</h1>
@@ -105,7 +111,6 @@ function SinglePetitionPage() {
             <div className="text-right">
               <span className="text-xs font-semibold inline-block">
                 {signedCount + "/" + petition.target + " "}signatures
-              
               </span>
             </div>
           </div>
@@ -171,15 +176,27 @@ function SinglePetitionPage() {
         </div>
 
         <div className="flex">
-        {isSigning && <Loading />}
-          <button onClick={handleSign} className={"py-3 px-6 mr-3 " + (isSigning ? 'bg-gray-400 cursor-not-allowed' : '')} disabled={isSigning}>
+          {isSigning && <Loading />}
+          <button
+            onClick={handleSign}
+            className={
+              "py-3 px-6 mr-3 " +
+              (isSigning ? "bg-gray-400 cursor-not-allowed" : "")
+            }
+            disabled={isSigning}
+          >
             Sign
           </button>
           <button
             onClick={handleFinishSignClick}
-            className={"py-3 px-6 text-gray-50" + (canFinishSign ? ' bg-teal-500' : ' bg-gray-400 cursor-not-allowed')}
+            className={
+              "py-3 px-6 text-gray-50" +
+              (canFinishSign
+                ? " bg-teal-500"
+                : " bg-gray-400 cursor-not-allowed")
+            }
             disabled={!canFinishSign}
-            >
+          >
             Finish Sign
           </button>
         </div>
