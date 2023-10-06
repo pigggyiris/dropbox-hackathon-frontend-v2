@@ -35,12 +35,15 @@ const StartPetitionNextPage = () => {
     console.log("petition:", petitionText);
 
     try {
-      const response = await axios.post("http://localhost:3000/v1/petitions/", {
-        userName: userName,
-        userEmail: userEmail,
-        title: location.state.title,
-        petition: petitionText,
-      });
+      const response = await axios.post(
+        "http://18.220.17.26:3000/v1/petitions/",
+        {
+          userName: userName,
+          userEmail: userEmail,
+          title: location.state.title,
+          petition: petitionText,
+        }
+      );
       setIsSigning(false);
       setcanCreateDelete(true); // 已签署
 
@@ -50,6 +53,7 @@ const StartPetitionNextPage = () => {
 
         setPetitionId(response.data.petitionId);
         setSignId(response.data.signId);
+        console.log(response.data.signUrl);
 
         client.open(signUrl, {
           clientId: "efe3f85f67aafe39ff9adc714413cf11",
@@ -63,7 +67,7 @@ const StartPetitionNextPage = () => {
     } catch (error) {
       setIsSigning(false);
       console.error("Error sending petition:", error);
-      Window.alert("Error sending petition:", error);
+      window.alert("Error sending petition:", error);
     }
   };
 
@@ -81,7 +85,7 @@ const StartPetitionNextPage = () => {
     }
 
     try {
-      await axios.delete(`http://localhost:3000/v1/petitions/${petitionId}`);
+      await axios.delete(`http://18.220.17.26:3000/v1/petitions/${petitionId}`);
       window.alert("The signed petition has been deleted.");
     } catch (error) {
       console.error("Error deleting petition:", error);
@@ -95,10 +99,13 @@ const StartPetitionNextPage = () => {
     }
 
     try {
-      const response = await axios.put("http://localhost:3000/v1/petitions/", {
-        petitionId: petitionId,
-        signId: signId,
-      });
+      const response = await axios.put(
+        "http://18.220.17.26:3000/v1/petitions/",
+        {
+          petitionId: petitionId,
+          signId: signId,
+        }
+      );
       console.log("Petition updated successfully!", response.data);
       window.alert("Petition has been successfully created!");
 

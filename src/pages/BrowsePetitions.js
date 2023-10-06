@@ -13,7 +13,7 @@ function BrowsePetitionPage() {
   const fetchPetitions = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/v1/petitions/allpetitions"
+        "http://18.220.17.26:3000/v1/petitions/allpetitions"
       );
       console.log(response.data[0]); // 打印第一个petition来检查
 

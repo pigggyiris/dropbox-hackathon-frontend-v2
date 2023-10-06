@@ -9,7 +9,7 @@ const Trending = () => {
     const fetchTrendingPetitions = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/v1/petitions/allpetitions"
+          "http://18.220.17.26:3000/v1/petitions/allpetitions"
         );
         // 从响应中取得前6个petitions
         const topPetitions = response.data.slice(0, 6);
@@ -21,7 +21,6 @@ const Trending = () => {
 
     fetchTrendingPetitions();
   }, []);
-
 
   return (
     <div className="w-full my-32">

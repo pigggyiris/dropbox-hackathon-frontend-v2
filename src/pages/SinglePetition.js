@@ -18,7 +18,7 @@ function SinglePetitionPage() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/v1/petitions/${fileID}`)
+      .get(`http://18.220.17.26:3000/v1/petitions/${fileID}`)
       .then((response) => {
         setPetition(response.data);
       })
@@ -30,7 +30,7 @@ function SinglePetitionPage() {
   function handleSign() {
     setIsSigning(true);
     axios
-      .put(`http://localhost:3000/v1/petitions/${fileID}`)
+      .put(`http://18.220.17.26:3000/v1/petitions/${fileID}`)
       .then((response) => {
         setIsSigning(false);
         setCanFinishSign(true);
@@ -63,10 +63,13 @@ function SinglePetitionPage() {
     }
 
     try {
-      const response = await axios.put("http://localhost:3000/v1/petitions/", {
-        petitionId: petitionId,
-        signId: signId,
-      });
+      const response = await axios.put(
+        "http://18.220.17.26:3000/v1/petitions/",
+        {
+          petitionId: petitionId,
+          signId: signId,
+        }
+      );
       console.log("Petition updated successfully!", response.data);
       window.alert("Petition updated successfully!");
       navigate("/BrowsePetitions");
