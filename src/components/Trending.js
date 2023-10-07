@@ -9,7 +9,7 @@ const Trending = () => {
     const fetchTrendingPetitions = async () => {
       try {
         const response = await axios.get(
-          "http://18.118.5.110:3000/v1/petitions/allpetitions"
+          "http://18.218.149.183:3000/v1/petitions/allpetitions"
         );
         // 从响应中取得前6个petitions
         const topPetitions = response.data.slice(0, 6);
