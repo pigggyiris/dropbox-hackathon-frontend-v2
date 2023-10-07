@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import React from "react";
-import defaultImg from '../assets/default-petition.png'
-
+import defaultImg from "../assets/default-petition.png";
 
 function PetitionCard({
   id,
@@ -44,8 +43,7 @@ function PetitionCard({
       />
       <div className="flex-1 overflow-y-hidden">
         <h2 className="font-bold text-xl mb-2">{title}</h2>
-        <p className="text-gray-600">{"Created by: " + author}</p>
-        <p className="text-gray-600 mb-2">{"Created On: " + createdOn}</p>
+
         <p className="line-clamp-5 mb-2">{description}</p>
 
         <div className="relative pt-1">

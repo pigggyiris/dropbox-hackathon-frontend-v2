@@ -53,6 +53,7 @@ const StartPetitionNextPage = () => {
 
         setPetitionId(response.data.petitionId);
         setSignId(response.data.signId);
+
         console.log(response.data.signUrl);
 
         client.open(signUrl, {

@@ -94,10 +94,7 @@ function SinglePetitionPage() {
           className="w-3/4 rounded-lg mb-4 mx-auto"
         />
         <h1 className="font-bold text-xl mb-2">{petition.petitionName}</h1>
-        <p className="text-gray-600 mb-2">{"Created by: " + petition.author}</p>
-        <p className="text-gray-600 mb-2">
-          {"Created On: " + petition.createdOn}
-        </p>
+
         <p className="line-clamp-5 mb-2">{petition.petitionContent}</p>
       </div>
 
