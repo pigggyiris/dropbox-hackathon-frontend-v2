@@ -13,9 +13,8 @@ function BrowsePetitionPage() {
   const fetchPetitions = async () => {
     try {
       const response = await axios.get(
-        "http://18.220.17.26:3000/v1/petitions/allpetitions"
+        "http://18.118.5.110:3000/v1/petitions/allpetitions"
       );
-      console.log(response.data[0]); // 打印第一个petition来检查
 
       setDisplayPetition(response.data); // 使用axios时，数据存储在response.data中
     } catch (error) {

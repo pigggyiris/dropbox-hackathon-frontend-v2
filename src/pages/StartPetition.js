@@ -39,9 +39,9 @@ function StartPetitionPage() {
     setIsFetching(true);
 
     axios
-      .post("http://18.220.17.26:3000/v1/petitions/text", petitionData)
+      .post("http://18.118.5.110:3000/v1/petitions/text", petitionData)
       .then((response) => {
-        console.log(response);
+        console.log(petitionData);
         setResponseData(response.data);
         setIsFetching(false);
         window.alert(
