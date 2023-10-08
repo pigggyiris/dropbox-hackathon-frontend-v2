@@ -35,15 +35,12 @@ const StartPetitionNextPage = () => {
     console.log("petition:", petitionText);
 
     try {
-      const response = await axios.post(
-        "http://18.218.149.183:3000/v1/petitions/",
-        {
-          userName: userName,
-          userEmail: userEmail,
-          title: location.state.title,
-          petition: petitionText,
-        }
-      );
+      const response = await axios.post("http://localhost:3000/v1/petitions/", {
+        userName: userName,
+        userEmail: userEmail,
+        title: location.state.title,
+        petition: petitionText,
+      });
       setIsSigning(false);
       setcanCreateDelete(true); // 已签署
 
@@ -86,9 +83,7 @@ const StartPetitionNextPage = () => {
     }
 
     try {
-      await axios.delete(
-        `http://18.218.149.183:3000/v1/petitions/${petitionId}`
-      );
+      await axios.delete(`http://localhost:3000/v1/petitions/${petitionId}`);
       window.alert("The signed petition has been deleted.");
       navigate("/StartPetition");
     } catch (error) {
@@ -103,13 +98,10 @@ const StartPetitionNextPage = () => {
     }
 
     try {
-      const response = await axios.put(
-        "http://18.218.149.183:3000/v1/petitions/",
-        {
-          petitionId: petitionId,
-          signId: signId,
-        }
-      );
+      const response = await axios.put("http://localhost:3000/v1/petitions/", {
+        petitionId: petitionId,
+        signId: signId,
+      });
       console.log("Petition updated successfully!", response.data);
       window.alert("Petition has been successfully created!");
 

@@ -18,7 +18,7 @@ function SinglePetitionPage() {
 
   useEffect(() => {
     axios
-      .get(`http://18.218.149.183:3000/v1/petitions/${fileID}`)
+      .get(`http://localhost:3000/v1/petitions/${fileID}`)
       .then((response) => {
         setPetition(response.data);
       })
@@ -30,7 +30,7 @@ function SinglePetitionPage() {
   function handleSign() {
     setIsSigning(true);
     axios
-      .put(`http://18.218.149.183:3000/v1/petitions/${fileID}`)
+      .put(`http://localhost:3000/v1/petitions/${fileID}`)
       .then((response) => {
         setIsSigning(false);
         setCanFinishSign(true);

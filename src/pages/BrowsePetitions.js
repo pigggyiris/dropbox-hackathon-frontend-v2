@@ -13,7 +13,7 @@ function BrowsePetitionPage() {
   const fetchPetitions = async () => {
     try {
       const response = await axios.get(
-        "http://18.218.149.183:3000/v1/petitions/allpetitions"
+        "http://localhost:3000/v1/petitions/allpetitions"
       );
 
       setDisplayPetition(response.data); // 使用axios时，数据存储在response.data中

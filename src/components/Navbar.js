@@ -15,7 +15,7 @@ const Navbar = () => {
 
     try {
       const response = await axios.get(
-        `http://18.218.149.183:3000/v1/petitions/?text=${search}`
+        `http://localhost:3000/v1/petitions/?text=${search}`
       );
 
       if (
