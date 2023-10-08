@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import axios from "axios";
+import { BASE_URL } from "../config";
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
@@ -15,7 +16,7 @@ const Navbar = () => {
 
     try {
       const response = await axios.get(
-        `http://localhost:3000/v1/petitions/?text=${search}`
+        `${BASE_URL}/v1/petitions/?text=${search}`
       );
 
       if (

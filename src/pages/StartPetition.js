@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Loading from "../components/Loading";
+import { BASE_URL } from "../config";
 
 function StartPetitionPage() {
   const [petitionData, setPetitionData] = useState({
@@ -39,7 +40,7 @@ function StartPetitionPage() {
     setIsFetching(true);
 
     axios
-      .post("http://localhost:3000/v1/petitions/text", petitionData)
+      .post(`${BASE_URL}/v1/petitions/text`, petitionData)
       .then((response) => {
         console.log(petitionData);
         setResponseData(response.data);

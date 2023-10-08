@@ -4,6 +4,7 @@ import axios from "axios";
 import HelloSign from "hellosign-embedded";
 import defaultImg from "../assets/default-petition.png";
 import Loading from "../components/Loading";
+import { BASE_URL } from "../config";
 
 function SinglePetitionPage() {
   const { fileID } = useParams();
@@ -18,7 +19,7 @@ function SinglePetitionPage() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/v1/petitions/${fileID}`)
+      .get(`${BASE_URL}/v1/petitions/${fileID}`)
       .then((response) => {
         setPetition(response.data);
       })
@@ -30,7 +31,7 @@ function SinglePetitionPage() {
   function handleSign() {
     setIsSigning(true);
     axios
-      .put(`http://localhost:3000/v1/petitions/${fileID}`)
+      .put(`${BASE_URL}/v1/petitions/${fileID}`)
       .then((response) => {
         setIsSigning(false);
         setCanFinishSign(true);

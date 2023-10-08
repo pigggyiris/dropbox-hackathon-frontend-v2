@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import PetitionCard from "../components/PetitionCard";
+import { BASE_URL } from "../config";
 
 function BrowsePetitionPage() {
   const [displayPetitions, setDisplayPetition] = useState([]);
@@ -12,9 +13,7 @@ function BrowsePetitionPage() {
 
   const fetchPetitions = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:3000/v1/petitions/allpetitions"
-      );
+      const response = await axios.get(`${BASE_URL}/v1/petitions/allpetitions`);
 
       setDisplayPetition(response.data); // 使用axios时，数据存储在response.data中
     } catch (error) {

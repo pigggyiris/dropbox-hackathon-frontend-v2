@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import PetitionCard from "../components/PetitionCard";
+import { BASE_URL } from "../config";
 
 const Trending = () => {
   const [trendingPetitions, setTrendingPetitions] = useState([]);
@@ -9,7 +10,7 @@ const Trending = () => {
     const fetchTrendingPetitions = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/v1/petitions/allpetitions"
+          `${BASE_URL}/v1/petitions/allpetitions`
         );
         // 从响应中取得前6个petitions
         const topPetitions = response.data.slice(0, 6);
