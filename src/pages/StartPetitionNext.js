@@ -127,7 +127,9 @@ const StartPetitionNextPage = () => {
         clearInterval(intervalId);
         setIsSigning(false);
         console.log("Max attempts reached.");
-        window.alert("Technical error, please try again.");
+        window.alert(
+          "Technical error while generating pdf in Dropbox, please try again."
+        );
       } else {
         counter += 1;
         console.log("Data is null. Retrying in 5 seconds...");
