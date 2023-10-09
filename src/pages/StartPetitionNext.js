@@ -97,28 +97,43 @@ const StartPetitionNextPage = () => {
       console.error("Missing petitionId or signId");
       return;
     }
-    setIsSigning(true);
-    try {
-      const response = await axios.put(`${BASE_URL}/v1/petitions/`, {
-        petitionId: petitionId,
-        signId: signId,
-      });
 
-      if (response.data === null) {
-        console.log("Data is null. Retrying in 5 seconds...");
-        setTimeout(handleCreateClick, 5000);
-      } else {
+    setIsSigning(true);
+
+    const callAPI = async () => {
+      try {
+        const response = await axios.put(`${BASE_URL}/v1/petitions/`, {
+          petitionId: petitionId,
+          signId: signId,
+        });
+
+        return response;
+      } catch (error) {
+        console.error("Error updating petition:", error);
+        return null;
+      }
+    };
+    let counter = 0;
+    const intervalId = setInterval(async () => {
+      const response = await callAPI();
+
+      if (response && response.data.data !== null) {
+        clearInterval(intervalId);
         setIsSigning(false);
         console.log("Petition updated successfully!", response.data);
         window.alert("Petition has been successfully created!");
         navigate("/BrowsePetitions");
+      } else if (counter >= 8) {
+        clearInterval(intervalId);
+        setIsSigning(false);
+        console.log("Max attempts reached.");
+        window.alert("Technical error, please try again.");
+      } else {
+        counter += 1;
+        console.log("Data is null. Retrying in 5 seconds...");
       }
-    } catch (error) {
-      setIsSigning(false);
-      console.error("Error updating petition:", error);
-    }
+    }, 5000);
   };
-
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold mb-4">Start Petition (Step 2/2)</h1>

@@ -63,17 +63,42 @@ function SinglePetitionPage() {
       return;
     }
 
-    try {
-      const response = await axios.put(`${BASE_URL}/v1/petitions/`, {
-        petitionId: petitionId,
-        signId: signId,
-      });
-      console.log("Petition updated successfully!", response.data);
-      window.alert("Petition updated successfully!");
-      navigate("/BrowsePetitions");
-    } catch (error) {
-      console.error("Error updating petition:", error);
-    }
+    setIsSigning(true);
+
+    const callAPI = async () => {
+      try {
+        const response = await axios.put(`${BASE_URL}/v1/petitions/`, {
+          petitionId: petitionId,
+          signId: signId,
+        });
+        return response;
+      } catch (error) {
+        console.error("Error updating petition:", error);
+        return null;
+      }
+    };
+
+    let counter = 0;
+
+    const intervalId = setInterval(async () => {
+      const response = await callAPI();
+
+      if (response && response.data.data !== null) {
+        clearInterval(intervalId);
+        setIsSigning(false);
+        console.log("Petition updated successfully!", response.data);
+        window.alert("Petition has been successfully updated!");
+        navigate("/BrowsePetitions");
+      } else if (counter >= 8) {
+        clearInterval(intervalId);
+        setIsSigning(false);
+        console.log("Max attempts reached.");
+        window.alert("Technical error, please try again.");
+      } else {
+        counter += 1;
+        console.log("Data is null. Retrying in 5 seconds...");
+      }
+    }, 5000);
   };
 
   if (!petition) {
