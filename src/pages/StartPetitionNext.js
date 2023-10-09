@@ -97,17 +97,24 @@ const StartPetitionNextPage = () => {
       console.error("Missing petitionId or signId");
       return;
     }
-
+    setIsSigning(true);
     try {
       const response = await axios.put(`${BASE_URL}/v1/petitions/`, {
         petitionId: petitionId,
         signId: signId,
       });
-      console.log("Petition updated successfully!", response.data);
-      window.alert("Petition has been successfully created!");
 
-      navigate("/BrowsePetitions");
+      if (response.data === null) {
+        console.log("Data is null. Retrying in 5 seconds...");
+        setTimeout(handleCreateClick, 5000);
+      } else {
+        setIsSigning(false);
+        console.log("Petition updated successfully!", response.data);
+        window.alert("Petition has been successfully created!");
+        navigate("/BrowsePetitions");
+      }
     } catch (error) {
+      setIsSigning(false);
       console.error("Error updating petition:", error);
     }
   };
