@@ -64,13 +64,10 @@ function SinglePetitionPage() {
     }
 
     try {
-      const response = await axios.put(
-        "http://18.218.149.183:3000/v1/petitions/",
-        {
-          petitionId: petitionId,
-          signId: signId,
-        }
-      );
+      const response = await axios.put(`${BASE_URL}/v1/petitions/`, {
+        petitionId: petitionId,
+        signId: signId,
+      });
       console.log("Petition updated successfully!", response.data);
       window.alert("Petition updated successfully!");
       navigate("/BrowsePetitions");
