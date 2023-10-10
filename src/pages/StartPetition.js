@@ -127,11 +127,21 @@ function StartPetitionPage() {
             className="w-20 border rounded p-2"
           >
             <option value="10">10</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-            <option value="200">200</option>
-            <option value="500">500</option>
-            <option value="1000">1000</option>
+            <option value="50" disabled>
+              50
+            </option>
+            <option value="100" disabled>
+              100
+            </option>
+            <option value="200" disabled>
+              200
+            </option>
+            <option value="500" disabled>
+              500
+            </option>
+            <option value="1000" disabled>
+              1000
+            </option>
           </select>
         </div>
 

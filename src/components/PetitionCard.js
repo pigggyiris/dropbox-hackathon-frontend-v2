@@ -5,8 +5,7 @@ import defaultImg from "../assets/default-petition.png";
 function PetitionCard({
   id,
   title,
-  author,
-  createdOn,
+
   description,
   numberOfSigned,
   target,

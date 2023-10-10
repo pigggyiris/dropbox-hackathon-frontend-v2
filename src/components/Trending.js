@@ -22,6 +22,16 @@ const Trending = () => {
 
     fetchTrendingPetitions();
   }, []);
+  const countSigned = (signatures) => {
+    let count = 0;
+    for (let signature of signatures) {
+      if (signature.isUsed) {
+        count++;
+      } else {
+        return count;
+      }
+    }
+  };
 
   return (
     <div className="w-full my-32">
@@ -42,8 +52,8 @@ const Trending = () => {
               author={petition.author}
               createdOn={petition.createdOn}
               description={petition.description}
-              numberOfSigned={petition.numberOfSigned}
-              target={petition.target}
+              numberOfSigned={countSigned(petition.signatures)}
+              target={10}
               image={petition.image}
               pdfData={petition.pdfData}
             />

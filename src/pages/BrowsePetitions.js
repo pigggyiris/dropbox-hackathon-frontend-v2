@@ -14,6 +14,7 @@ function BrowsePetitionPage() {
   const fetchPetitions = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/v1/petitions/allpetitions`);
+      console.log(response.data);
 
       setDisplayPetition(response.data); // 使用axios时，数据存储在response.data中
     } catch (error) {
@@ -32,7 +33,16 @@ function BrowsePetitionPage() {
       setDisplayPetition(filteredPetitions);
     }
   };
-
+  const countSigned = (signatures) => {
+    let count = 0;
+    for (let signature of signatures) {
+      if (signature.isUsed) {
+        count++;
+      } else {
+        return count;
+      }
+    }
+  };
   return (
     <div className="p-8">
       <h1 className="text-4xl font-bold mb-4">Browse Petitions</h1>
@@ -55,8 +65,8 @@ function BrowsePetitionPage() {
             author={petition.author}
             createdOn={petition.createdOn}
             description={petition.petitionContent}
-            numberOfSigned={petition.numberOfSigned}
-            target={petition.target}
+            numberOfSigned={countSigned(petition.signatures)}
+            target={10}
             image={petition.image}
             pdfData={petition.data}
           />

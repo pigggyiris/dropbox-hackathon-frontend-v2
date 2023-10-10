@@ -106,9 +106,10 @@ function SinglePetitionPage() {
   if (!petition) {
     return <div>Loading...</div>;
   }
-  let signedCount = petition?.signed?.length || 0;
+  let signedCount =
+    petition?.signatures?.filter((sig) => sig.isUsed).length || 0;
 
-  const percentage = Math.round((signedCount / petition.target) * 100);
+  const percentage = Math.round((signedCount / 10) * 100);
 
   return (
     <div className="flex">
@@ -135,7 +136,7 @@ function SinglePetitionPage() {
             </div>
             <div className="text-right">
               <span className="text-xs font-semibold inline-block">
-                {signedCount + "/" + petition.target + " "}signatures
+                {signedCount + "/10 "}signatures
               </span>
             </div>
           </div>
