@@ -55,7 +55,7 @@ const Trending = () => {
               numberOfSigned={countSigned(petition.signatures)}
               target={10}
               image={petition.image}
-              pdfData={petition.pdfData}
+              pdfData={petition.data}
             />
           ))}
         </div>
